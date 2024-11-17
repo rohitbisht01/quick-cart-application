@@ -1,22 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import network from "../utils/network";
 import allApis from "../config";
-import fetchUserDetails from "../utils/fetchUserDetails";
-import { useDispatch } from "react-redux";
-import { setUserDetails } from "../store/userSlice";
 
-const LoginPage = () => {
+const ResetPasswordPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [userData, setUserData] = useState({
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,18 +25,42 @@ const LoginPage = () => {
     });
   };
 
+  useEffect(() => {
+    if (!location?.state?.data?.success) {
+      navigate("/");
+    }
+
+    if (location?.state?.email) {
+      setUserData((prev) => {
+        return {
+          ...prev,
+          email: location?.state?.email,
+        };
+      });
+    }
+  }, []);
+
   const handleShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
 
+  const handleShowConfirmPassword = () => {
+    setShowConfirmPassword((prev) => !prev);
+  };
+
   const isValid = Object.values(userData).every((el) => el);
 
-  const handleLoginUser = async (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
+
+    if (userData.password !== userData.confirmPassword) {
+      toast.error("New password and confirm password must be same.");
+      return;
+    }
 
     try {
       const response = await network({
-        ...allApis.login,
+        ...allApis.resetPassword,
         data: userData,
       });
 
@@ -47,19 +70,12 @@ const LoginPage = () => {
 
       if (response.data.success) {
         toast.success(response.data.message);
-
-        localStorage.setItem("accessToken", response.data.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.data.refreshToken);
-
-        const userDetails = await fetchUserDetails();
-        dispatch(setUserDetails(userDetails.data));
-
+        navigate("/login");
         setUserData({
-          name: "",
           email: "",
-          password: "",
+          newPassword: "",
+          confirmPassword: "",
         });
-        navigate("/");
       }
     } catch (error) {
       toast.error(error?.response?.data?.message);
@@ -71,35 +87,7 @@ const LoginPage = () => {
       <div className="mx-auto w-full max-w-lg ">
         <h1 className="font-bold text-xl text-center">Welcome to QuickCart</h1>
 
-        <form className="grid gap-3 mt-6" onSubmit={handleLoginUser}>
-          <div className="grid gap-1">
-            <label htmlFor="name" className="font-semibold text-base">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={userData.name}
-              placeholder="Enter name"
-              onChange={handleChange}
-              className="p-2 border rounded-md text-sm"
-            />
-          </div>
-
-          <div className="grid gap-1">
-            <label htmlFor="email" className="font-semibold text-base">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={userData.email}
-              placeholder="Enter email"
-              onChange={handleChange}
-              className="p-2 border rounded-md text-sm"
-            />
-          </div>
-
+        <form className="grid gap-3 mt-6" onSubmit={handleResetPassword}>
           <div className="grid gap-1">
             <label htmlFor="password" className="font-semibold text-base">
               Password
@@ -117,13 +105,33 @@ const LoginPage = () => {
                 {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
               </div>
             </div>
-            <Link
-              to={"/forgot-password"}
-              className="flex justify-end text-sm text-green-600 hover:text-green-700"
-            >
-              Forgot Password ?
-            </Link>
           </div>
+
+          <div className="grid gap-1">
+            <label
+              htmlFor="confirmPassword"
+              className="font-semibold text-base"
+            >
+              Confirm Password
+            </label>
+            <div className="flex p-2 border rounded-md text-sm items-center">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={userData.confirmPassword}
+                placeholder="Enter confirm password"
+                onChange={handleChange}
+                className="w-full outline-none"
+              />
+              <div
+                className="cursor-pointer"
+                onClick={handleShowConfirmPassword}
+              >
+                {showConfirmPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+              </div>
+            </div>
+          </div>
+
           <button
             disabled={!isValid}
             className={`p-2 border rounded-md w-full my-4 text-white font-semibold cursor-pointer ${
@@ -132,17 +140,17 @@ const LoginPage = () => {
                 : "bg-gray-500 hover:bg-gray-600"
             }`}
           >
-            Login
+            Reset Password
           </button>
         </form>
         <div className="text-center mt-4">
           <p className="text-gray-600">
-            Don&apos;t have an account?{" "}
+            Already have an account?{" "}
             <Link
-              to="/register"
+              to="/login"
               className="font-semibold text-green-700 hover:text-green-800 transition-colors duration-200"
             >
-              Register
+              Login
             </Link>
           </p>
         </div>
@@ -151,4 +159,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ResetPasswordPage;
