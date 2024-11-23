@@ -25,6 +25,21 @@ const allApis = {
     url: "/api/v1/user/reset-password",
     method: "put",
   },
+
+  logout: {
+    url: "/api/v1/user/logout",
+    method: "get",
+  },
+
+  // User Avatar upload
+  uploadAvatar: {
+    url: "/api/v1/user/upload-avatar",
+    method: "put",
+  },
+  updateUserInfo: {
+    url: "/api/v1/user/update-user",
+    method: "put",
+  },
 };
 
 export default allApis;
