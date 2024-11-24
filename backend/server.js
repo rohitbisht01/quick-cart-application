@@ -7,6 +7,9 @@ const helmet = require("helmet");
 const connectDb = require("./config/connectdb");
 
 const userRouter = require("./routes/userRoute");
+const productRouter = require("./routes/productRoute");
+const categoryRouter = require("./routes/categoryRoute");
+const uploadRouter = require("./routes/uploadRoute");
 
 dotenv.config();
 const PORT = process.env.PORT || 4000;
@@ -31,6 +34,9 @@ app.use(
 );
 
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/product", productRouter);
+app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/file", uploadRouter);
 
 app.listen(PORT, () => {
   console.log(`server running on ${PORT}`);

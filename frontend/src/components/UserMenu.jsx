@@ -47,7 +47,7 @@ const UserMenu = ({ onClose }) => {
 
       <div className="text-sm flex items-center gap-1">
         <span className="max-w-52 text-ellipsis line-clamp-1">{user.name}</span>
-        <span className="text-medium text-red-600">
+        <span className="text-sm text-green-600">
           {" "}
           {user.role === "ADMIN" ? "Admin" : ""}
         </span>

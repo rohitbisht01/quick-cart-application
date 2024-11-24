@@ -40,6 +40,29 @@ const allApis = {
     url: "/api/v1/user/update-user",
     method: "put",
   },
+
+  uploadImage: {
+    url: "/api/v1/file/upload",
+    method: "post",
+  },
+
+  // Category
+  addCategory: {
+    url: "/api/v1/category/add-category",
+    method: "post",
+  },
+  getCategory: {
+    url: "/api/v1/category/get",
+    method: "get",
+  },
+  deleteCategory: {
+    url: "/api/v1/category/delete",
+    method: "delete",
+  },
+  updateCategory: {
+    url: "/api/v1/category/update",
+    method: "put",
+  },
 };
 
 export default allApis;
