@@ -62,10 +62,10 @@ const CategoryPage = () => {
 
   return (
     <section>
-      <div className="flex items-center justify-between p-2 shadow-md">
+      <div className="flex items-center justify-between p-2 shadow-sm">
         <h1 className="font-semibold">Category</h1>
         <button
-          className="text-sm rounded-md border py-1 px-2"
+          className="text-sm rounded-md border py-1 px-2 hover:bg-gray-200"
           onClick={() => setOpenUploadCategory(true)}
         >
           Add Category
@@ -79,7 +79,7 @@ const CategoryPage = () => {
           categoryData.length > 0 &&
           categoryData.map((category, index) => {
             return (
-              <div className="w-32 h-56 rounded shadow-md" key={category._id}>
+              <div className="w-40 h-44 rounded shadow-md" key={category._id}>
                 <img
                   src={category.image}
                   alt={category.name}

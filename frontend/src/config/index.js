@@ -63,6 +63,24 @@ const allApis = {
     url: "/api/v1/category/update",
     method: "put",
   },
+
+  // Subcategory
+  createSubCategory: {
+    url: "/api/v1/subcategory/create",
+    method: "post",
+  },
+  getSubCategory: {
+    url: "/api/v1/subcategory/get",
+    method: "get",
+  },
+  updateSubCategory: {
+    url: "/api/v1/subcategory/update",
+    method: "put",
+  },
+  deleteSubCategory: {
+    url: "/api/v1/subcategory/delete",
+    method: "delete",
+  },
 };
 
 export default allApis;
