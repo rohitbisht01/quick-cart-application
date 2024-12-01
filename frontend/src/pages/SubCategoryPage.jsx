@@ -9,6 +9,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { MdDelete } from "react-icons/md";
 import DisplayTable from "../components/DisplayTable";
 import ConfirmBox from "../components/ConfirmBox";
+import ViewImage from "../components/ViewImage";
 
 const SubCategoryPage = () => {
   const [data, setData] = useState([]);
@@ -159,6 +160,8 @@ const SubCategoryPage = () => {
           fetchData={fetchSubCategory}
         />
       )}
+
+      {imageUrl && <ViewImage url={imageUrl} onClose={() => setImageUrl("")} />}
 
       {openEdit && (
         <EditSubcategory
